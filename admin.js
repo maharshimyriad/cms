@@ -97,6 +97,11 @@ async function authenticateWithGitHub(e) {
     // Update user display
     document.getElementById('current-user').textContent = `${username}/${repo} (${branch})`;
 
+    // Store credentials to localStorage for frontend to use
+    localStorage.setItem('cms_owner', username);
+    localStorage.setItem('cms_repo', repo);
+    localStorage.setItem('cms_branch', branch);
+
     // Load items
     loadItems();
   } catch (error) {

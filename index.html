@@ -76,31 +76,21 @@
 
   <!-- Scripts -->
   <script src="github-api.js"></script>
-  <script src="app.js"></script>
-
+  
+  <!-- Configure default GitHub repo here (optional) -->
+  <!-- Leave empty to use admin panel login or URL parameters -->
   <script>
-    // ⚠️ IMPORTANT: Update these OR use URL parameters
-    // Format: index.html?owner=YOUR_USERNAME&repo=YOUR_REPO_NAME
-    // 
-    // Example:
-    // index.html?owner=john&repo=my-products
+    // ⚙️ SET YOUR DEFAULT REPO HERE (optional)
+    // Leave both empty to require admin login or use URL parameters
+    window.CMS_DEFAULT_OWNER = '';   // Your GitHub username (e.g., 'john')
+    window.CMS_DEFAULT_REPO = '';    // Your repo name (e.g., 'my-products')
     
-    const APP_CONFIG = {
-      // Option 1: Set here (gets overridden by URL parameters)
-      owner: 'YOUR_USERNAME',  // Change this to your GitHub username
-      repo: 'YOUR_REPO',       // Change this to your repository name
-    };
-
-    // Option 2: Use URL parameters (recommended)
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('owner')) APP_CONFIG.owner = urlParams.get('owner');
-    if (urlParams.get('repo')) APP_CONFIG.repo = urlParams.get('repo');
-
-    // Store for frontend to use
-    if (APP_CONFIG.owner && APP_CONFIG.owner !== 'YOUR_USERNAME') {
-      localStorage.setItem('cms_owner', APP_CONFIG.owner);
-      localStorage.setItem('cms_repo', APP_CONFIG.repo);
-    }
+    // Examples:
+    // window.CMS_DEFAULT_OWNER = 'john';
+    // window.CMS_DEFAULT_REPO = 'my-products';
+    // Then index.html works with zero configuration!
   </script>
+  
+  <script src="app.js"></script>
 </body>
 </html>

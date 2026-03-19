@@ -10,28 +10,47 @@ let appData = { items: [] };
  */
 async function fetchDataFromGitHub() {
   try {
-    // Get GitHub username and repo from query parameters
+    // Get owner and repo - priority order:
+    // 1. Try URL parameters first
+    // 2. Try localStorage (from admin panel)
+    // 3. Use environment/config defaults (if set in index.html)
+    
     let owner = new URLSearchParams(window.location.search).get('owner');
     let repo = new URLSearchParams(window.location.search).get('repo');
 
-    // If not in URL, check localStorage (set by admin panel)
+    // Try localStorage (set by admin panel)
     if (!owner || !repo) {
-      owner = localStorage.getItem('cms_owner');
-      repo = localStorage.getItem('cms_repo');
+      const stored_owner = localStorage.getItem('cms_owner');
+      const stored_repo = localStorage.getItem('cms_repo');
+      if (stored_owner && stored_repo) {
+        owner = stored_owner;
+        repo = stored_repo;
+      }
     }
 
-    // If still missing, show error with instructions
+    // Try window config (set in index.html)
+    if (!owner || !repo) {
+      if (window.CMS_DEFAULT_OWNER && window.CMS_DEFAULT_REPO) {
+        owner = window.CMS_DEFAULT_OWNER;
+        repo = window.CMS_DEFAULT_REPO;
+      }
+    }
+
+    // If still missing, show error
     if (!owner || !repo) {
       showError(`
-        ⚠️ GitHub repository not configured.
+        ⚠️ No repository configured.
         
-        Please use this URL format:
-        index.html?owner=YOUR_USERNAME&repo=YOUR_REPO_NAME
+        To fix, follow ONE option:
         
-        Example:
-        index.html?owner=john&repo=my-products
+        1️⃣ Sign in via admin.html (auto-configures)
+           → Then open index.html (no config needed!)
         
-        Or access from admin panel to auto-configure.
+        2️⃣ Use URL with parameters
+           → index.html?owner=USERNAME&repo=REPO
+        
+        3️⃣ Set default in index.html
+           → Edit the script tag in index.html
       `);
       return false;
     }
@@ -238,6 +257,7 @@ function escapeHtml(text) {
  */
 async function initApp() {
   const loadingDiv = document.getElementById('loading');
+  const mainContent = document.getElementById('main-content');
   
   // Show loading
   if (loadingDiv) {
@@ -250,6 +270,11 @@ async function initApp() {
   // Hide loading
   if (loadingDiv) {
     loadingDiv.style.display = 'none';
+  }
+
+  // Show main content after data loads
+  if (mainContent) {
+    mainContent.style.display = 'block';
   }
 
   if (success) {
