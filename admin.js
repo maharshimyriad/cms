@@ -321,10 +321,23 @@ async function saveToGitHub(message) {
 
   try {
     await github.updateData(currentData, message);
-    showMessage('Changes saved successfully', 'success');
+    showMessage('✅ Changes saved successfully!', 'success');
   } catch (error) {
-    showMessage(`Error saving changes: ${error.message}`, 'error');
-    console.error(error);
+    const errorMsg = error.message;
+    console.error('GitHub API Error:', errorMsg);
+    
+    // Show detailed error with troubleshooting link
+    const fullError = `
+${errorMsg}
+
+🔧 TROUBLESHOOTING:
+1. Verify token: https://github.com/settings/tokens
+2. Check token has "repo" scope (write access)
+3. Token might be expired - generate a new one
+4. If still failing, try logout and log back in
+    `;
+    
+    showMessage(fullError, 'error');
   } finally {
     setLoading(false);
   }

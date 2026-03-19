@@ -10,31 +10,46 @@ let appData = { items: [] };
  */
 async function fetchDataFromGitHub() {
   try {
-    // Get GitHub username and repo from query parameters or prompt
+    // Get GitHub username and repo from query parameters
     let owner = new URLSearchParams(window.location.search).get('owner');
     let repo = new URLSearchParams(window.location.search).get('repo');
 
+    // If not in URL, check localStorage (set by admin panel)
     if (!owner || !repo) {
-      // Try reading from localStorage if set by admin panel
-      owner = localStorage.getItem('cms_owner') || prompt('Enter GitHub username:');
-      repo = localStorage.getItem('cms_repo') || prompt('Enter GitHub repository name:');
+      owner = localStorage.getItem('cms_owner');
+      repo = localStorage.getItem('cms_repo');
     }
 
+    // If still missing, show error with instructions
     if (!owner || !repo) {
-      showError('GitHub credentials required. Please check the instructions.');
+      showError(`
+        ⚠️ GitHub repository not configured.
+        
+        Please use this URL format:
+        index.html?owner=YOUR_USERNAME&repo=YOUR_REPO_NAME
+        
+        Example:
+        index.html?owner=john&repo=my-products
+        
+        Or access from admin panel to auto-configure.
+      `);
       return false;
     }
 
-    // Initialize API without token (public read access)
+    // Initialize API without token (works for public repos)
     const github = new GitHubAPI(owner, repo, 'main', null);
 
     // Fetch data
     const fetchedData = await github.fetchData();
     appData = fetchedData.data;
 
+    // Store for future use
+    localStorage.setItem('cms_owner', owner);
+    localStorage.setItem('cms_repo', repo);
+
     return true;
   } catch (error) {
-    showError(`Failed to load data: ${error.message}`);
+    showError(`❌ Failed to load data: ${error.message}`);
     console.error(error);
     return false;
   }

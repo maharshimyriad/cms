@@ -131,13 +131,18 @@ class GitHubAPI {
         body: JSON.stringify(payload),
       });
 
-      if (response.status === 401 || response.status === 403) {
-        throw new Error('Unauthorized: Invalid token or insufficient permissions');
+      if (response.status === 401) {
+        throw new Error('❌ Token is invalid or expired. Generate a new one: https://github.com/settings/tokens');
+      }
+
+      if (response.status === 403) {
+        const errorData = await response.json();
+        throw new Error('❌ forbidden: Your token lacks write permissions. Ensure it has "repo" scope. Generate a new token: https://github.com/settings/tokens');
       }
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(`Failed to update file: ${error.message || response.statusText}`);
+        throw new Error(`❌ Update failed: ${error.message || response.statusText}. Check token scope and repository access.`);
       }
 
       const responseData = await response.json();
