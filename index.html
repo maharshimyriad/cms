@@ -8,12 +8,17 @@
 </head>
 <body>
   <!-- Hero Header -->
-  <div class="site-header">
+  <header>
     <div class="container">
-      <h1>📦 Product Manager</h1>
-      <p>Browse our collection of products</p>
+      <h1>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 9l6-6 6 6M6 9h12M6 9v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9" />
+        </svg>
+        Product Manager
+      </h1>
+      <p class="header-subtitle">Browse our collection of products</p>
     </div>
-  </div>
+  </header>
 
   <div class="container">
     <!-- Error Message -->
@@ -43,7 +48,6 @@
           <!-- Category Filter -->
           <select id="category-filter" aria-label="Filter by category">
             <option value="all">All Categories</option>
-            <!-- Options populated dynamically -->
           </select>
 
           <!-- Sort -->
@@ -61,7 +65,12 @@
           </select>
 
           <!-- Admin Link -->
-          <a href="admin.html" class="btn btn-secondary">🔑 Admin Panel</a>
+          <a href="admin.html" class="btn btn-secondary">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 15.5c1.93 0 3.5-1.57 3.5-3.5S13.93 8.5 12 8.5s-3.5 1.57-3.5 3.5 1.57 3.5 3.5 3.5zM12 21v-6M6 3h12M3 3h18v3H3z" />
+            </svg>
+            Admin Panel
+          </a>
         </div>
       </div>
 
@@ -78,17 +87,9 @@
   <script src="github-api.js"></script>
   
   <!-- Configure default GitHub repo here (optional) -->
-  <!-- Leave empty to use admin panel login or URL parameters -->
   <script>
-    // ⚙️ SET YOUR DEFAULT REPO HERE (optional)
-    // Leave both empty to require admin login or use URL parameters
-    window.CMS_DEFAULT_OWNER = 'maharshimyriad';   // Your GitHub username (e.g., 'john')
-    window.CMS_DEFAULT_REPO = 'cms';    // Your repo name (e.g., 'my-products')
-    
-    // Examples:
-    // window.CMS_DEFAULT_OWNER = 'john';
-    // window.CMS_DEFAULT_REPO = 'my-products';
-    // Then index.html works with zero configuration!
+    window.CMS_DEFAULT_OWNER = 'maharshimyriad';
+    window.CMS_DEFAULT_REPO = 'cms';
   </script>
   
   <script src="app.js"></script>
