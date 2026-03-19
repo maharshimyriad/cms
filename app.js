@@ -10,33 +10,29 @@ let appData = { items: [] };
  */
 async function fetchDataFromGitHub() {
   try {
-    // Get owner and repo - priority order:
-    // 1. Try URL parameters first
-    // 2. Try localStorage (from admin panel)
-    // 3. Use environment/config defaults (if set in index.html)
+    // Priority order to find owner and repo:
+    // 1. URL parameters: ?owner=X&repo=Y
+    // 2. localStorage: from admin panel login
+    // 3. Window defaults: set in index.html
     
-    let owner = new URLSearchParams(window.location.search).get('owner');
-    let repo = new URLSearchParams(window.location.search).get('repo');
-
-    // Try localStorage (set by admin panel)
-    if (!owner || !repo) {
-      const stored_owner = localStorage.getItem('cms_owner');
-      const stored_repo = localStorage.getItem('cms_repo');
-      if (stored_owner && stored_repo) {
-        owner = stored_owner;
-        repo = stored_repo;
-      }
-    }
-
-    // Try window config (set in index.html)
-    if (!owner || !repo) {
-      if (window.CMS_DEFAULT_OWNER && window.CMS_DEFAULT_REPO) {
-        owner = window.CMS_DEFAULT_OWNER;
-        repo = window.CMS_DEFAULT_REPO;
-      }
-    }
-
-    // If still missing, show error
+    let owner = null;
+    let repo = null;
+    
+    // Priority 1: URL parameters
+    const urlOwner = new URLSearchParams(window.location.search).get('owner');
+    const urlRepo = new URLSearchParams(window.location.search).get('repo');
+    if (urlOwner) owner = urlOwner;
+    if (urlRepo) repo = urlRepo;
+    
+    // Priority 2: localStorage (from admin.html login)
+    if (!owner) owner = localStorage.getItem('cms_owner');
+    if (!repo) repo = localStorage.getItem('cms_repo');
+    
+    // Priority 3: Window defaults (set in index.html script tag)
+    if (!owner) owner = window.CMS_DEFAULT_OWNER;
+    if (!repo) repo = window.CMS_DEFAULT_REPO;
+    
+    // Check if we have both owner and repo
     if (!owner || !repo) {
       showError(`
         ⚠️ No repository configured.
