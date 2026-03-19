@@ -1,0 +1,12 @@
+{
+  "items": [
+    {
+      "id": "prod_001",
+      "name": "Sample Product",
+      "price": 29.99,
+      "description": "This is a sample product",
+      "image": "https://via.placeholder.com/300",
+      "category": "Electronics"
+    }
+  ]
+}

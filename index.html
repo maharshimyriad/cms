@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Manager - CMS</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Hero Header -->
+  <div class="site-header">
+    <div class="container">
+      <h1>📦 Product Manager</h1>
+      <p>Browse our collection of products</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Error Message -->
+    <div id="error-message" role="alert"></div>
+
+    <!-- Loading State -->
+    <div id="loading" class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Loading products...</p>
+    </div>
+
+    <!-- Main Content (hidden while loading) -->
+    <div id="main-content" style="display: none;">
+      <!-- Controls Section -->
+      <div class="section">
+        <div class="top-controls">
+          <!-- Search -->
+          <div class="search-input-wrapper">
+            <input
+              type="text"
+              id="search-input"
+              placeholder="Search products..."
+              aria-label="Search products"
+            >
+          </div>
+
+          <!-- Category Filter -->
+          <select id="category-filter" aria-label="Filter by category">
+            <option value="all">All Categories</option>
+            <!-- Options populated dynamically -->
+          </select>
+
+          <!-- Sort -->
+          <select id="sort-select" aria-label="Sort by">
+            <option value="name-asc">Sort: Name (A-Z)</option>
+            <option value="name-desc">Sort: Name (Z-A)</option>
+            <option value="price-asc">Sort: Price (Low-High)</option>
+            <option value="price-desc">Sort: Price (High-Low)</option>
+          </select>
+
+          <!-- View Toggle -->
+          <select id="view-toggle" aria-label="View type">
+            <option value="cards">View: Cards</option>
+            <option value="table">View: Table</option>
+          </select>
+
+          <!-- Admin Link -->
+          <a href="admin.html" class="btn btn-secondary">🔑 Admin Panel</a>
+        </div>
+      </div>
+
+      <!-- Items Container -->
+      <div class="section">
+        <div id="items-container" class="items-grid">
+          <!-- Items populated dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="github-api.js"></script>
+  <script src="app.js"></script>
+
+  <script>
+    // Metadata for the app
+    const APP_CONFIG = {
+      // Update these with your GitHub repo details, or use query parameters
+      // ?owner=username&repo=reponame
+      owner: new URLSearchParams(window.location.search).get('owner') || 'your-username',
+      repo: new URLSearchParams(window.location.search).get('repo') || 'your-repo',
+    };
+
+    // Override for display
+    window.addEventListener('DOMContentLoaded', () => {
+      const mainContent = document.getElementById('main-content');
+      const loading = document.getElementById('loading');
+
+      // Show main content after data loads
+      setTimeout(() => {
+        if (mainContent && loading) {
+          // This will be shown once data is fetched successfully
+          loading.addEventListener('transitionend', () => {
+            if (mainContent.style.display !== 'block') {
+              mainContent.style.display = 'block';
+            }
+          });
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>
